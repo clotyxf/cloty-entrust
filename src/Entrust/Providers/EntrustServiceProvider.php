@@ -134,8 +134,6 @@ class EntrustServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return [
-            'command.entrust.migration'
-        ];
+
     }
 }
