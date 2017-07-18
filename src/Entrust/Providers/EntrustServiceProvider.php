@@ -29,9 +29,9 @@ class EntrustServiceProvider extends ServiceProvider
     public function boot()
     {
         // Publish config files
-        $this->publishes([
+        /*$this->publishes([
             __DIR__.'/../config/entrust.php' => app()->basePath() . '/config/entrust.php',
-        ]);
+        ]);*/
 
         // Register commands
         $this->commands('command.entrust.migration');
