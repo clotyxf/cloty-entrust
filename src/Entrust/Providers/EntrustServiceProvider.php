@@ -1,4 +1,6 @@
-<?php namespace Cloty\Entrust\Providers;
+<?php
+
+namespace Cloty\Entrust\Providers;
 
 /**
  * This file is part of Entrust,
@@ -100,7 +102,7 @@ class EntrustServiceProvider extends ServiceProvider
             return new Entrust($app);
         });
 
-        $this->app->alias('entrust', 'Zizaco\Entrust\Entrust');
+        $this->app->alias('entrust', 'Cloty\Entrust\Entrust');
     }
 
     /**
