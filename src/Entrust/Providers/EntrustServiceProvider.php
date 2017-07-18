@@ -51,7 +51,7 @@ class EntrustServiceProvider extends ServiceProvider
 
         $this->registerCommands();
 
-        $this->mergeConfig();
+        //$this->mergeConfig();
     }
 
     /**
