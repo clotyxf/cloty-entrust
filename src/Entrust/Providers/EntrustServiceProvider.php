@@ -34,7 +34,7 @@ class EntrustServiceProvider extends ServiceProvider
         ]);*/
 
         // Register commands
-        $this->commands('command.entrust.migration');
+        //$this->commands('command.entrust.migration');
 
         // Register blade directives
         $this->bladeDirectives();
@@ -112,9 +112,7 @@ class EntrustServiceProvider extends ServiceProvider
      */
     private function registerCommands()
     {
-        /*$this->app->singleton('command.entrust.migration', function ($app) {
-            return new MigrationCommand();
-        });*/
+
     }
 
     /**
