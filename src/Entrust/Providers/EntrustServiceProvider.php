@@ -125,7 +125,7 @@ class EntrustServiceProvider extends ServiceProvider
     private function mergeConfig()
     {
         $this->mergeConfigFrom(
-            __DIR__.'/../config/config.php', 'entrust'
+            __DIR__.'/../config/entrust.php', 'entrust'
         );
     }
 
