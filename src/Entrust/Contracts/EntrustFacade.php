@@ -1,4 +1,6 @@
-<?php namespace Cloty\Entrust;
+<?php
+
+namespace Cloty\Entrust\Contracts;
 
 /**
  * This file is part of Entrust,
