@@ -33,7 +33,7 @@ cloty-entrust 是一个基于laravel5的简单验证角色权限的插件
 Cloty\Entrust\Providers\EntrustServiceProvider::class,
 ```
 
-3)同样的在 `config/app.php` 中的 `aliases ` 引入:
+3) 同样的在 `config/app.php` 中的 `aliases ` 引入:
 
 ```php
 'Entrust'   => Cloty\Entrust\Facades\EntrustFacade::class,
