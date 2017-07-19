@@ -160,6 +160,8 @@ $admin->attachPermission($permission); // 参数可以是EntrustPermission对象
 // 相当于 $admin->perms()->sync(array($permission->id));
 
 ```
+添加非p_id = 0的权限时，需指明上级p_id，子权限的命名方式 `name` 必须是用父级命名做前缀，如 `post_create`。
+创建子权限时如不写前缀`post_`，Entrust将自动补全。多级子权限亦同。如 `post_create_detail` ...
 
 #### 验证 Roles & Permissions
 
@@ -168,15 +170,15 @@ $admin->attachPermission($permission); // 参数可以是EntrustPermission对象
 ```php
 $user->hasRole('owner');   // false
 $user->hasRole('admin');   // true
-$user->can('edit-user');   // false
-$user->can('post'); // true
+$user->canDo('edit-user');   // false
+$user->canDo('post'); // true
 ```
 
 `hasRole()` 和 `canDo()` 验证角色和权限时都支持使用数组:
 
 ```php
 $user->hasRole(['owner', 'admin']);       // true
-$user->can(['edit-user', 'create-post']); // true
+$user->canDo(['edit-user', 'create-post']); // true
 ```
 
 默认情况下，如果为用户提供了任何角色或权限，则该方法将返回true。
@@ -185,8 +187,8 @@ $user->can(['edit-user', 'create-post']); // true
 ```php
 $user->hasRole(['owner', 'admin']);             // true
 $user->hasRole(['owner', 'admin'], true);       // false
-$user->can(['edit-user', 'post']);       // true
-$user->can(['edit-user', 'post'], true); // false
+$user->canDo(['edit-user', 'post']);       // true
+$user->canDo(['edit-user', 'post'], true); // false
 ```
 
 还可以通过 `Entrust` 这个类验证角色或权限 `canDo()` 和 `hasRole()`，通过Entrust验证时，验证的是当前登录的用户:
