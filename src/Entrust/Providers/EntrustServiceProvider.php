@@ -10,6 +10,11 @@ namespace Cloty\Entrust\Providers;
  * @package Cloty\Entrust
  */
 
+use Cloty\Entrust\Entrust;
+use Cloty\Entrust\EntrustRole;
+use Cloty\Entrust\EntrustPermission;
+use Cloty\Entrust\Repositories\Eloquent\EloquentPermissionRepository;
+use Cloty\Entrust\Repositories\Eloquent\EloquentRoleRepository;
 use Illuminate\Support\ServiceProvider;
 
 class EntrustServiceProvider extends ServiceProvider
@@ -29,9 +34,9 @@ class EntrustServiceProvider extends ServiceProvider
     public function boot()
     {
         // Publish config files
-        /*$this->publishes([
-            __DIR__.'/../config/entrust.php' => app()->basePath() . '/config/entrust.php',
-        ]);*/
+        $this->publishes([
+            __DIR__ . '/../../config/cloty-entrust.php' => app()->basePath() . '/config/entrust.php',
+        ]);
 
         // Register commands
         //$this->commands('command.entrust.migration');
@@ -47,11 +52,13 @@ class EntrustServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->registerRepositoryInterfaces();
+
         $this->registerEntrust();
 
         $this->registerCommands();
 
-        //$this->mergeConfig();
+        $this->mergeConfig();
     }
 
     /**
@@ -61,32 +68,34 @@ class EntrustServiceProvider extends ServiceProvider
      */
     private function bladeDirectives()
     {
-        if (!class_exists('\Blade')) return;
+        if (!class_exists('\Blade')) {
+            return;
+        }
 
         // Call to Entrust::hasRole
-        \Blade::directive('role', function($expression) {
+        \Blade::directive('role', function ($expression) {
             return "<?php if (\\Entrust::hasRole({$expression})) : ?>";
         });
 
-        \Blade::directive('endrole', function($expression) {
+        \Blade::directive('endrole', function ($expression) {
             return "<?php endif; // Entrust::hasRole ?>";
         });
 
         // Call to Entrust::can
-        \Blade::directive('permission', function($expression) {
-            return "<?php if (\\Entrust::can({$expression})) : ?>";
+        \Blade::directive('permission', function ($expression) {
+            return "<?php if (\\Entrust::canDo({$expression})) : ?>";
         });
 
-        \Blade::directive('endpermission', function($expression) {
-            return "<?php endif; // Entrust::can ?>";
+        \Blade::directive('endpermission', function ($expression) {
+            return "<?php endif; // Entrust::canDo ?>";
         });
 
         // Call to Entrust::ability
-        \Blade::directive('ability', function($expression) {
+        \Blade::directive('ability', function ($expression) {
             return "<?php if (\\Entrust::ability({$expression})) : ?>";
         });
 
-        \Blade::directive('endability', function($expression) {
+        \Blade::directive('endability', function ($expression) {
             return "<?php endif; // Entrust::ability ?>";
         });
     }
@@ -99,10 +108,32 @@ class EntrustServiceProvider extends ServiceProvider
     private function registerEntrust()
     {
         $this->app->bind('entrust', function ($app) {
-            return new Entrust($app);
+            return new Entrust($app, $app['entrust.repositories.role'], $app['entrust.repositories.permission']);
         });
 
         $this->app->alias('entrust', 'Cloty\Entrust\Entrust');
+    }
+
+    /**
+     * Bind repositories interfaces with their implementations.
+     */
+    protected function registerRepositoryInterfaces()
+    {
+        $this->app->singleton('entrust.repositories.role', function ($app) {
+            return new EloquentRoleRepository($app, new EntrustRole());
+        });
+
+        $this->app->singleton('Cloty\Entrust\Contracts\Repositories\RoleRepository', function ($app) {
+            return $app['entrust.repositories.role'];
+        });
+
+        $this->app->singleton('entrust.repositories.permission', function ($app) {
+            return new EloquentPermissionRepository($app, new EntrustPermission());
+        });
+
+        $this->app->singleton('Cloty\Entrust\Contracts\Repositories\PermissionRepository', function ($app) {
+            return $app['entrust.repositories.permission'];
+        });
     }
 
     /**
@@ -122,9 +153,9 @@ class EntrustServiceProvider extends ServiceProvider
      */
     private function mergeConfig()
     {
-        /*$this->mergeConfigFrom(
-            __DIR__.'/../config/entrust.php', 'entrust'
-        );*/
+        $this->mergeConfigFrom(
+            __DIR__ . '/../../config/cloty-entrust.php', 'entrust'
+        );
     }
 
     /**
