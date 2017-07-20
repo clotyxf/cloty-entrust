@@ -16,7 +16,7 @@ cloty-entrust 是一个基于laravel5的简单验证角色权限的插件
     - [概念](#概念)
         - [验证Roles&Permissions](#验证Roles&Permissions)
         - [ability](#ability)
-    - [Blade](#Blade)
+    - [Blade](#blade)
     - [Middleware](#middleware)
 
 ## 安装
@@ -310,7 +310,7 @@ You can use a middleware to filter routes and route groups by permission or role
 ```php
 Route::group(['prefix' => 'admin', 'middleware' => ['entrust.role:admin']], function() {
     Route::get('/', 'AdminController@welcome');
-    Route::get('/manage', ['middleware' => ['entrust.permission:manage-admins'], 'uses' => 'AdminController@manageAdmins']);
+    Route::get('/manage', ['middleware' => ['entrust.permission:manage_admins'], 'uses' => 'AdminController@manageAdmins']);
 });
 ```
 可以使用|符号作为* OR *运算符:
@@ -321,7 +321,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['entrust.role:admin']], func
 ```php
 'middleware' => ['entrust.role:owner', 'entrust.role:writer']
 ```
-对于更复杂的情况，可以使用 `entrust.ability` 中间件，传递3个参数: roles, permissions, validate_all
+对于更复杂的情况，可以使用 `entrust.ability` 中间件.使用时可传递3个参数: roles, permissions, validate_all
 ```php
-'middleware' => ['entrust.ability:admin|owner,create-post|edit-user,true']
+'middleware' => ['entrust.ability:admin|owner,post|post_create,true']
 ```
