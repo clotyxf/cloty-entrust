@@ -14,9 +14,9 @@ cloty-entrust 是一个基于laravel5的简单验证角色权限的插件
         - [User](#user)
 - [使用](#使用)
     - [概念](#概念)
-        - [验证Roles&Permissions](#验证-roles--permissions)
+        - [验证Roles&Permissions](#验证Roles&Permissions)
         - [ability](#ability)
-    - [Blade模板](#Blade模板)
+    - [Blade](#Blade)
     - [Middleware](#middleware)
 
 ## 安装
@@ -281,7 +281,7 @@ Entrust::ability('admin,owner', 'post,post_create');
 Auth::user()->ability('admin,owner', 'post,post_create');
 ```
 
-### Blade模板
+### Blade
 
 Entrust提供三个Blade模板指令。你可以在提供的指令中将参数直接传递到相应的方法：
 
