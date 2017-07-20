@@ -17,4 +17,13 @@ interface PermissionRepository extends AbstractRepository
      * @return \Cloty\Entrust\EntrustPermission;
      */
     public function create(array $attributes = []);
+
+    /**
+     * get permission.
+     *
+     * @param int $roleId
+     *
+     * @return \Cloty\Entrust\EntrustPermission;
+     */
+    public function getPermissionTree($roleId);
 }

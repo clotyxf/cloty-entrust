@@ -4,11 +4,12 @@ namespace Cloty\Entrust;
 
 use Illuminate\Database\Eloquent\Model;
 use Cloty\Entrust\Traits\User\RoleTrait;
+use Cloty\Entrust\Contracts\EntrustRoleInterface;
 
 /**
  * Class EntrustRole.
  */
-class EntrustRole extends Model
+class EntrustRole extends Model implements EntrustRoleInterface
 {
     use RoleTrait;
 

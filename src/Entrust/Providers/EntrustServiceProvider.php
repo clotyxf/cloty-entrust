@@ -11,8 +11,8 @@ namespace Cloty\Entrust\Providers;
  */
 
 use Cloty\Entrust\Entrust;
-use Cloty\Entrust\EntrustRole;
 use Cloty\Entrust\EntrustPermission;
+use Cloty\Entrust\EntrustRole;
 use Cloty\Entrust\Repositories\Eloquent\EloquentPermissionRepository;
 use Cloty\Entrust\Repositories\Eloquent\EloquentRoleRepository;
 use Illuminate\Support\ServiceProvider;
@@ -33,13 +33,9 @@ class EntrustServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Publish config files
-        $this->publishes([
-            __DIR__ . '/../../config/cloty-entrust.php' => app()->basePath() . '/config/entrust.php',
-        ]);
+        $this->publishConfig();
 
-        // Register commands
-        //$this->commands('command.entrust.migration');
+        $this->publishMigrations();
 
         // Register blade directives
         $this->bladeDirectives();
@@ -55,8 +51,6 @@ class EntrustServiceProvider extends ServiceProvider
         $this->registerRepositoryInterfaces();
 
         $this->registerEntrust();
-
-        $this->registerCommands();
 
         $this->mergeConfig();
     }
@@ -137,13 +131,24 @@ class EntrustServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the artisan commands.
-     *
-     * @return void
+     * Publish config file.
      */
-    private function registerCommands()
+    private function publishConfig()
     {
+        // Publish config files
+        $this->publishes([
+            __DIR__ . '/../../config/cloty-entrust.php' => app()->basePath() . '/config/entrust.php',
+        ]);
+    }
 
+    /**
+     * Publish migration file.
+     */
+    private function publishMigrations()
+    {
+        $this->publishes([
+            __DIR__ . '/../../migrations/' => base_path('database/migrations'),
+        ], 'migrations');
     }
 
     /**

@@ -19,7 +19,7 @@ return [
     | the role if it is in a different namespace.
     |
     */
-    'role' => 'Cloty\Entrust\EntrustRole',
+    'role' => 'App\PermissionRole',
 
     /*
     |--------------------------------------------------------------------------
@@ -29,7 +29,7 @@ return [
     | This is the roles table used by Entrust to save roles to the database.
     |
     */
-    'roles_table' => 'entrust_roles',
+    'roles_table' => 'permission_roles',
 
     /*
     |--------------------------------------------------------------------------
@@ -51,7 +51,7 @@ return [
     | Update the User if it is in a different namespace.
     |
     */
-    'user' => 'App\Models\User',
+    'user' => 'App\User',
 
     /*
     |--------------------------------------------------------------------------
@@ -62,18 +62,7 @@ return [
     | database.
     |
     */
-    'users_table' => 'crm_user',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Application Users Table key name
-    |--------------------------------------------------------------------------
-    |
-    | This is the user key used by Entrust to make a proper
-    | relation between roles and users
-    |
-    */
-    'user_key_name' => 'id',
+    'users_table' => 'users',
 
     /*
     |--------------------------------------------------------------------------
@@ -84,7 +73,7 @@ return [
     | database.
     |
     */
-    'role_user_table' => 'entrust_role_users',
+    'role_user_table' => 'permission_role_user',
 
     /*
     |--------------------------------------------------------------------------
@@ -106,7 +95,7 @@ return [
     | Update the permission if it is in a different namespace.
     |
     */
-    'permission' => 'Cloty\Entrust\EntrustPermission',
+    'permission' => 'App\Permission',
 
     /*
     |--------------------------------------------------------------------------
@@ -117,7 +106,7 @@ return [
     | database.
     |
     */
-    'permissions_table' => 'entrust_permissions',
+    'permissions_table' => 'permissions',
 
     /*
     |--------------------------------------------------------------------------
@@ -128,7 +117,7 @@ return [
     | between permissions and roles to the database.
     |
     */
-    'permission_role_table' => 'entrust_permission_roles',
+    'permission_role_table' => 'permission_permission',
 
     /*
     |--------------------------------------------------------------------------
@@ -140,8 +129,4 @@ return [
     |
     */
     'permission_foreign_key' => 'permission_id',
-
-    'ttl' => 120,
-
-    'cache_driver' => 'redis',
 ];

@@ -5,9 +5,9 @@ namespace Cloty\Entrust;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class EntrustPermission.
+ * Class EntrustPermissionRole.
  */
-class EntrustPermission extends Model
+class EntrustPermissionRole extends Model
 {
     /**
      * Table name.
@@ -35,6 +35,6 @@ class EntrustPermission extends Model
     {
         parent::__construct($attributes);
 
-        $this->table = config('entrust.permissions_table', 'entrust_permissions');
+        $this->table = config('entrust.permission_role_table', 'entrust_permission_roles');
     }
 }

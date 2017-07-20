@@ -12,6 +12,7 @@
 namespace Cloty\Entrust\Traits;
 
 use Cloty\Entrust\EntrustPermission;
+use Cloty\Entrust\EntrustPermissionRole;
 
 trait PermissionTrait
 {
@@ -102,5 +103,48 @@ trait PermissionTrait
         $name = $this->permAttributes['name'];
 
         return starts_with($name, $prefix);
+    }
+
+    public function getPermissionTree($roleId)
+    {
+        $permissions = EntrustPermission::all(['id', 'name', 'p_id', 'display_name', 'description'])->toArray();
+
+        $tree = $hasPermissions = [];
+
+        if (!empty($roleId)) {
+            $hasPermissions = EntrustPermissionRole::where('role_id', $roleId)->get(['permission_id'])->toArray();
+
+            $hasPermissions = array_pluck($hasPermissions, 'permission_id');
+        }
+
+
+        foreach ($permissions as $key => $data) {
+            if (!empty($hasPermissions)) {
+                if (in_array($data['id'], $hasPermissions)) {
+                    $permissions[$key]['is_perm'] = true;
+                } else {
+                    $permissions[$key]['is_perm'] = false;
+                }
+            }
+
+            $array[$data['id']] =& $permissions[$key];
+        }
+
+        foreach ($permissions as $key => $data) {
+            $parentId =  $data['p_id'];
+
+            if ($parentId == 0) {
+                $tree[] =& $permissions[$key];
+            } else {
+                if (isset($array[$parentId])) {
+
+                    $parent =& $array[$parentId];
+
+                    $parent['_child'][] =& $permissions[$key];
+                }
+            }
+        }
+
+        return $tree;
     }
 }

@@ -8,7 +8,7 @@ cloty-entrust 是一个基于laravel5的简单验证角色权限的插件
 - [安装](#安装)
 - [配置](#配置)
     - [表结构说明](#表结构说明)
-    - [模型](#模型)
+    - [Models](#Models)
         - [EntrustRole](#EntrustPermission)
         - [EntrustPermission](#EntrustPermission)
         - [User](#user)
@@ -45,10 +45,12 @@ Cloty\Entrust\Providers\EntrustServiceProvider::class,
 php artisan vendor:publish
 ```
 
-5) 中间件开发中（TODO）:
+5) 如果你需要引入中间件 [Middleware](#middleware) (Laravel 5.*) 时，须在 `app\Http\Kernel.php` 中添加以下内容:
 
 ```php
-
+    'entrust.role' => \Cloty\Entrust\Middleware\EntrustRole::class,
+    'entrust.permission' => \Cloty\Entrust\Middleware\EntrustPermission::class,
+    'entrust.ability' => \Cloty\Entrust\Middleware\EntrustAbility::class,
 ```
 
 ## 配置
@@ -74,7 +76,7 @@ php artisan migrate
 
 #### EntrustRole
 
-#### Permission
+#### EntrustPermission
 
 #### User
 
@@ -140,7 +142,7 @@ $user = User::where('username', 'cloty')->first();
 $user->attachRole($admin); // 参数可以是EntrustRole对象、数组或id
 
 // 或者laravel框架原生的关系绑定
-$user->roles()->attach($admin->id); // 只能是角色ID
+$user->entrustRoles()->attach($admin->id); // 只能是角色ID
 ```
 
 现在我们只需要为这些角色添加权限:
@@ -280,3 +282,46 @@ Auth::user()->ability('admin,owner', 'post,post_create');
 ```
 
 ### Blade模板
+
+Entrust提供三个Blade模板指令。你可以在提供的指令中将参数直接传递到相应的方法：
+
+```php
+@role('admin')
+    <p>具有有`admin` 角色的用户可以看到这一点.渲染时被替换成
+    \Entrust::hasRole('admin')</p>
+@endrole
+
+@permission('post')
+    <p>具有给定权限的用户可以看到这一点.渲染时被替换成
+    \Entrust::canDo('post').</p>
+@endpermission
+
+@ability('admin,owner', 'post,post_create')
+    <p>具有给定abilities的用户可以看到. 渲染时被替换成
+    \Entrust::ability('admin,owner', 'post,post_create')</p>
+@endability
+```
+
+### Middleware
+
+可以使用中间件`entrust.role`或`entrust.permission`过滤路由和路由组:
+
+You can use a middleware to filter routes and route groups by permission or role
+```php
+Route::group(['prefix' => 'admin', 'middleware' => ['entrust.role:admin']], function() {
+    Route::get('/', 'AdminController@welcome');
+    Route::get('/manage', ['middleware' => ['entrust.permission:manage-admins'], 'uses' => 'AdminController@manageAdmins']);
+});
+```
+可以使用|符号作为* OR *运算符:
+```php
+'middleware' => ['entrust.role:admin|root']
+```
+要使用* AND *验证时只需使用多个中间件实例:
+```php
+'middleware' => ['entrust.role:owner', 'entrust.role:writer']
+```
+对于更复杂的情况，可以使用 `entrust.ability` 中间件，传递3个参数: roles, permissions, validate_all
+```php
+'middleware' => ['entrust.ability:admin|owner,create-post|edit-user,true']
+```
