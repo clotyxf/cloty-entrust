@@ -306,7 +306,6 @@ Entrust提供三个Blade模板指令。你可以在提供的指令中将参数�
 
 可以使用中间件`entrust.role`或`entrust.permission`过滤路由和路由组:
 
-You can use a middleware to filter routes and route groups by permission or role
 ```php
 Route::group(['prefix' => 'admin', 'middleware' => ['entrust.role:admin']], function() {
     Route::get('/', 'AdminController@welcome');
