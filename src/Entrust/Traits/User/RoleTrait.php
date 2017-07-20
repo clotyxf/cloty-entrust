@@ -26,12 +26,26 @@ trait RoleTrait
         if (Cache::store(config('entrust.cache_driver'))->getStore() instanceof TaggableStore) {
             return Cache::store(config('entrust.cache_driver'))->tags(Config::get('entrust.permission_role_table'))
                 ->remember($cacheKey, Config::get('cache.ttl', 60), function () {
-                    return $this->perms()->get();
+                    return $this->perms()->get(['name']);
                 });
         } else {
-            return $this->perms()->get();
+            return $this->perms()->get(['name']);
+        }
+    }
+
+    /**
+     * Refresh the cache
+     *
+     * @return boolean
+     */
+    public function flushCache()
+    {
+        if (Cache::store(config('entrust.cache_driver'))->getStore() instanceof TaggableStore) {
+            logger()->info('flush_cache');
+            Cache::store(config('entrust.cache_driver'))->tags(Config::get('entrust.permission_role_table'))->flush();
         }
 
+        return true;
     }
 
     /**
@@ -106,9 +120,7 @@ trait RoleTrait
             $this->perms()->detach();
         }
 
-        if (Cache::store(config('entrust.cache_driver'))->getStore() instanceof TaggableStore) {
-            Cache::store(config('entrust.cache_driver'))->tags(Config::get('entrust.permission_role_table'))->flush();
-        }
+        $this->flushCache();
     }
 
     /**
@@ -129,6 +141,8 @@ trait RoleTrait
         }
 
         $this->perms()->attach($permission);
+
+        $this->flushCache();
     }
 
     /**
@@ -149,6 +163,8 @@ trait RoleTrait
         }
 
         $this->perms()->detach($permission);
+
+        $this->flushCache();
     }
 
     /**

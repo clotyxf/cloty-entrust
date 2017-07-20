@@ -30,12 +30,27 @@ trait EntrustUserTrait
 
         if (Cache::store(config('entrust.cache_driver'))->getStore() instanceof TaggableStore) {
             return Cache::store(config('entrust.cache_driver'))->tags(Config::get('entrust.role_user_table'))
-                ->remember($cacheKey, Config::get('entrust.ttl'), function () {
+                ->remember($cacheKey, Config::get('entrust.ttl', 60), function () {
                     return $this->entrustRoles()->get();
                 });
         } else {
             return $this->entrustRoles()->get();
         }
+    }
+
+    /**
+     * Refresh the cache
+     *
+     * @return boolean
+     */
+    public function flushCache()
+    {
+        if (Cache::store(config('entrust.cache_driver'))->getStore() instanceof TaggableStore) {
+            logger()->info('flush_cache');
+            Cache::store(config('entrust.cache_driver'))->tags(Config::get('entrust.role_user_table'))->flush();
+        }
+
+        return true;
     }
 
     /**
@@ -199,6 +214,8 @@ trait EntrustUserTrait
         }
 
         $this->entrustRoles()->attach($role);
+
+        $this->flushCache();
     }
 
     /**
@@ -217,6 +234,8 @@ trait EntrustUserTrait
         }
 
         $this->entrustRoles()->detach($role);
+
+        $this->flushCache();
     }
 
     /**

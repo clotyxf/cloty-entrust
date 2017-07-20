@@ -132,17 +132,35 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Entrust permission foreign key
+    | Cache valid time
     |--------------------------------------------------------------------------
     |
-    | This is the permission foreign key used by Entrust to make a proper
-    | relation between permissions and roles
+    | This parameter is the cache expiration time
     |
     */
-    'permission_foreign_key' => 'permission_id',
+    'ttl' => 60,
 
-    'ttl' => 120,
-
-
+    /*
+    |--------------------------------------------------------------------------
+    | Default Cache Store
+    |--------------------------------------------------------------------------
+    |
+    | This option controls the default cache connection that gets used while
+    | using this caching library. This connection is used when another is
+    | not explicitly specified when executing a given caching function.
+    |
+    | Supported: "apc", "array", "memcached", "redis"
+    |
+    */
     'cache_driver' => 'redis',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Certification failure callback Store
+    |--------------------------------------------------------------------------
+    |
+    | Supported: "1", "2"
+    |
+    */
+    'cfc' => 1,
 ];
