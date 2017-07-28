@@ -17,19 +17,21 @@ use Illuminate\Support\Facades\Config;
 trait RoleTrait
 {
     //Big block of caching functionality.
-    public function cachedPermissions()
+    public function cachedPermissions($rolePrimaryKey = null)
     {
-        $rolePrimaryKey = $this->primaryKey;
+        if (is_null($rolePrimaryKey)) {
+            $rolePrimaryKey = $this->primaryKey;
+        }
 
-        $cacheKey = 'entrust_permissions_for_role_' . $this->$rolePrimaryKey;
+        $cacheKey = 'entrust_permissions_for_role_' . $rolePrimaryKey;
 
         if (Cache::store(config('entrust.cache_driver'))->getStore() instanceof TaggableStore) {
             return Cache::store(config('entrust.cache_driver'))->tags(Config::get('entrust.permission_role_table'))
                 ->remember($cacheKey, Config::get('cache.ttl', 60), function () {
-                    return $this->perms()->get(['name']);
+                    return array_pluck($this->perms()->get(['name'])->toArray(), 'name');
                 });
         } else {
-            return $this->perms()->get(['name']);
+            return array_pluck($this->perms()->get(['name'])->toArray(), 'name');
         }
     }
 
@@ -96,7 +98,7 @@ trait RoleTrait
             return $requireAll;
         } else {
             foreach ($this->cachedPermissions() as $permission) {
-                if ($permission->name == $name) {
+                if ($permission == $name) {
                     return true;
                 }
             }

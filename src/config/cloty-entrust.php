@@ -152,7 +152,7 @@ return [
     | Supported: "apc", "array", "memcached", "redis"
     |
     */
-    'cache_driver' => 'redis',
+    'cache_driver' => env('ENTRUST_CACHE_DRIVER', 'file'),,
 
     /*
     |--------------------------------------------------------------------------
