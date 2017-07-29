@@ -147,4 +147,19 @@ trait PermissionTrait
 
         return $tree;
     }
+
+    /**
+     * Refresh the cache
+     *
+     * @return boolean
+     */
+    public function flushCache()
+    {
+        if (Cache::store(config('entrust.cache_driver'))->getStore() instanceof TaggableStore) {
+            logger()->info('flush_cache');
+            Cache::store(config('entrust.cache_driver'))->tags(Config::get('entrust.permission_role_table'))->flush();
+        }
+
+        return true;
+    }
 }
