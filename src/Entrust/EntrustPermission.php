@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class EntrustPermission extends Model
 {
+    use \Cloty\Entrust\Traits\User\PermissionTrait;
     /**
      * Table name.
      *
