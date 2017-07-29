@@ -13,6 +13,8 @@ namespace Cloty\Entrust\Traits;
 
 use Cloty\Entrust\EntrustPermission;
 use Cloty\Entrust\EntrustPermissionRole;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
 
 trait PermissionTrait
 {
