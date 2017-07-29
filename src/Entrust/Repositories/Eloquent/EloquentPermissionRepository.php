@@ -35,7 +35,7 @@ class EloquentPermissionRepository extends AbstractEloquentRepository implements
     public function create(array $attributes = [])
     {
         if (!array_key_exists('name', $attributes) || empty($attributes['name'])) {
-            throw new RoleExistsException('the current array not exists the key is name');
+            throw new PermissionExistsException('the current array not exists the key is name');
         }
 
         if (false == $name = $this->setPermissionName($attributes)) {
