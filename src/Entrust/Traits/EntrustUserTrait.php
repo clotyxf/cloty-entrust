@@ -126,8 +126,6 @@ trait EntrustUserTrait
                     $permKey = $permKeys[0] . '_' . $permKeys[1];
                 }
 
-                $islikePerm = ends_with($permission, '*');
-
                 $permissions = $role->cachedPermissions(null, $permKey);
 
                 foreach ($permissions as $perm) {
