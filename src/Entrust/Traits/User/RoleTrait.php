@@ -17,20 +17,26 @@ use Illuminate\Support\Facades\Config;
 trait RoleTrait
 {
     //Big block of caching functionality.
-    public function cachedPermissions($rolePrimaryKey = null)
+    public function cachedPermissions($rolePrimaryKey = null, $permKey = null)
     {
         if (is_null($rolePrimaryKey)) {
             $rolePrimaryKey = $this->primaryKey;
         }
 
-        $cacheKey = 'entrust_permissions_for_role_' . $rolePrimaryKey;
+        $cacheKey = 'entrust_permissions_for_role_' . $rolePrimaryKey . $permKey;
 
         if (Cache::store(config('entrust.cache_driver'))->getStore() instanceof TaggableStore) {
             return Cache::store(config('entrust.cache_driver'))->tags(Config::get('entrust.permission_role_table'))
-                ->remember($cacheKey, Config::get('cache.ttl', 60), function () {
+                ->remember($cacheKey, Config::get('cache.ttl', 60), function () use($permKey) {
+                    if ($permKey) {
+                        return array_pluck($this->perms()->where('name', 'like', $permKey . '%')->get(['name'])->toArray(), 'name');
+                    }
                     return array_pluck($this->perms()->get(['name'])->toArray(), 'name');
                 });
         } else {
+            if ($permKey) {
+                return array_pluck($this->perms()->where('name', 'like', $permKey . '%')->get(['name'])->toArray(), 'name');
+            }
             return array_pluck($this->perms()->get(['name'])->toArray(), 'name');
         }
     }

@@ -117,7 +117,20 @@ trait EntrustUserTrait
         } else {
             foreach ($this->cachedRoles() as $role) {
                 // Validate against the Permission table
-                foreach ($role->cachedPermissions() as $perm) {
+
+                $permKeys = explode('_', $permission);
+
+                $permKey = null;
+
+                if (count($permKeys) > 1) {
+                    $permKey = $permKeys[0] . '_' . $permKeys[1];
+                }
+
+                $islikePerm = ends_with($permission, '*');
+
+                $permissions = $role->cachedPermissions(null, $permKey);
+
+                foreach ($permissions as $perm) {
                     if (str_is($permission, $perm)) {
                         return true;
                     }
