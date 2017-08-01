@@ -47,14 +47,19 @@ class EntrustPermission
         }
 
         if ($this->auth->guest() || !$request->user()->canDo($permissions)) {
-            abort(403);
+
+            $isAjax = $request->ajax();
+
+            if ($isAjax) {
+                return response()->json(['status' => 0, 'msg' => '权限不被允许']);
+            }
+
+            if (config('entrust.cfc') == 1) {
+                abort(403);
+            }
+
+            return back()->with('error', '权限不被允许');
         }
-
-        $end = microtime(true);
-        $peek_memory = round(memory_get_peak_usage(true) / 1024.0 / 1024.0, 2);
-        $grow_memory = $peek_memory - $start_memory;
-
-        $time = ($end - $start) * 1000;
 
         return $next($request);
     }

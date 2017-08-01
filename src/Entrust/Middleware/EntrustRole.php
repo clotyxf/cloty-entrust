@@ -44,7 +44,17 @@ class EntrustRole
         }
 
         if ($this->auth->guest() || !$request->user()->hasRole($roles)) {
-            abort(403);
+            $isAjax = $request->ajax();
+
+            if ($isAjax) {
+                return response()->json(['status' => 0, 'msg' => '权限不被允许']);
+            }
+
+            if (config('entrust.cfc') == 1) {
+                abort(403);
+            }
+
+            return redirect()->back()->with('error', '权限不被允许');
         }
 
         return $next($request);

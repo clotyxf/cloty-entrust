@@ -57,6 +57,13 @@ php artisan vendor:publish
 
 可以通过编辑文件  `config/entrust.php` 变更对应的表名或者模型
 
+```php
+    'cfc' => 1 // 中间件验证失败是默认1，返回abort(403);
+```
+
+`cfc` 可选参数`1`|`2`，为2时,错误返回`back()->with('error', '权限不被允许')`。
+请求方式为`ajax`时，验证不通过统一返回`response()->json(['status' => 0, 'msg' => '权限不被允许'])`。
+
 ###
 
 配置完后可以使用artisan迁移命令来运行它:
