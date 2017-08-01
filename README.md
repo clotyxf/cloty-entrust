@@ -58,7 +58,7 @@ php artisan vendor:publish
 可以通过编辑文件  `config/entrust.php` 变更对应的表名或者模型
 
 ```php
-    'cfc' => 1 // 中间件验证失败是默认1，返回abort(403);
+    'cfc' => 1 // 默认值1，中间件验证失败时返回abort(403);
 ```
 
 `cfc` 可选参数`1`|`2`，为2时,错误返回`back()->with('error', '权限不被允许')`。
