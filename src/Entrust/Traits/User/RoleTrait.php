@@ -20,7 +20,8 @@ trait RoleTrait
     public function cachedPermissions($rolePrimaryKey = null, $permKey = null)
     {
         if (is_null($rolePrimaryKey)) {
-            $rolePrimaryKey = $this->id;
+            $rolePrimaryKey = $this->primaryKey;
+            $rolePrimaryKey = $this->$rolePrimaryKey;
         }
 
         $cacheKey = 'entrust_permissions_for_role_' . $rolePrimaryKey . $permKey;
