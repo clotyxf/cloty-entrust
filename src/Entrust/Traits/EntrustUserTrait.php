@@ -24,7 +24,7 @@ trait EntrustUserTrait
     //Big block of caching functionality.
     public function cachedRoles()
     {
-        $userPrimaryKey = $this->id;
+        $userPrimaryKey = $this->primaryKey;
 
         $cacheKey = 'entrust_roles_for_user_' . $this->$userPrimaryKey;
 
