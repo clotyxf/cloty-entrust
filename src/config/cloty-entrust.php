@@ -132,6 +132,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Entrust permission foreign key
+    |--------------------------------------------------------------------------
+    |
+    | This is the permission foreign key used by Entrust to make a proper
+    | relation between permissions and roles
+    |
+    */
+    'permission_foreign_key' => 'permission_id',
+
+    /*
+    |--------------------------------------------------------------------------
     | Cache valid time
     |--------------------------------------------------------------------------
     |
