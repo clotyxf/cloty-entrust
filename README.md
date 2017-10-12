@@ -9,7 +9,7 @@ cloty-entrust 是一个基于laravel5的简单验证角色权限的插件
 - [配置](#配置)
     - [表结构说明](#表结构说明)
     - [Models](#Models)
-        - [EntrustRole](#EntrustPermission)
+        - [EntrustRole](#EntrustRole)
         - [EntrustPermission](#EntrustPermission)
         - [EntrustPermissionRole](#EntrustPermissionRole)
         - [User](#user)
