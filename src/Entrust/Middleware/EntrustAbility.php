@@ -12,6 +12,7 @@ namespace Cloty\Entrust\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Http\JsonResponse;
 
 class EntrustAbility
 {
@@ -58,7 +59,7 @@ class EntrustAbility
             $isAjax = $request->ajax();
 
             if ($isAjax) {
-                return response()->json(['status' => 0, 'msg' => '权限不被允许']);
+                return new JsonResponse(['status' => 0, 'msg' => '权限不被允许']);
             }
 
             if (config('entrust.cfc') == 1) {
