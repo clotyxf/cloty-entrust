@@ -5,20 +5,23 @@ cloty-entrust 是一个基于laravel5的简单验证角色权限的插件
 
 ## 内容
 
-- [安装](#安装)
-- [配置](#配置)
-    - [表结构说明](#表结构说明)
-    - [Models](#models)
-        - [EntrustRole](#entrustrole)
-        - [EntrustPermission](#entrustpermission)
-        - [EntrustPermissionRole](#entrustpermissionrole)
-        - [User](#user)
-- [使用](#使用)
-    - [概念](#概念)
-        - [验证Roles&Permissions](#验证Roles&Permissions)
-        - [ability](#ability)
-    - [Blade](#blade)
-    - [Middleware](#middleware)
+- [Entrust (Laravel 5 Package)](#entrust-laravel-5-package)
+    - [内容](#%E5%86%85%E5%AE%B9)
+    - [安装](#%E5%AE%89%E8%A3%85)
+    - [配置](#%E9%85%8D%E7%BD%AE)
+        - [](#)
+        - [表结构说明](#%E8%A1%A8%E7%BB%93%E6%9E%84%E8%AF%B4%E6%98%8E)
+        - [Entrust Models](#entrust-models)
+            - [EntrustRole](#entrustrole)
+            - [EntrustPermission](#entrustpermission)
+            - [EntrustPermissionRole](#entrustpermissionrole)
+            - [User](#user)
+    - [使用](#%E4%BD%BF%E7%94%A8)
+        - [例子](#%E4%BE%8B%E5%AD%90)
+            - [验证Roles&Permissions](#%E9%AA%8C%E8%AF%81rolespermissions)
+            - [User ability & Entrust ability](#user-ability--entrust-ability)
+        - [Blade](#blade)
+        - [Middleware](#middleware)
 
 ## 安装
 
@@ -80,7 +83,7 @@ php artisan migrate
 - `entrust_role_users` &mdash; [many-to-many](https://laravel.com/docs/5.4/eloquent-relationships#many-to-many-polymorphic-relations) 角色与用户之间的关系
 - `entrust_permission_roles` &mdash; [many-to-many](https://laravel.com/docs/5.4/eloquent-relationships#many-to-many-polymorphic-relations) 角色和权限之间的关系
 
-### Models
+### Entrust Models
 
 #### EntrustRole
 
@@ -121,9 +124,9 @@ class User extends Eloquent
 
 ## 使用
 
-### 概念
+### 例子
 
-开始使用entrust：
+`Controller` use `Entrust`：
 
 ```php
 <?php
@@ -184,8 +187,8 @@ $admin->attachPermission($permission); // 参数可以是EntrustPermission对象
 // 相当于 $admin->perms()->sync(array($permission->id));
 
 ```
-添加非p_id = 0的权限时，需指明上级p_id，子权限的命名方式 `name` 必须是用父级命名做前缀，如 `post_create`。
-创建子权限时如不写前缀`post_`，Entrust将自动补全。多级子权限亦同。如 `post_create_detail` ...
+添加非p_id = 0的权限时，需指明上级p_id，子权限的命名方式 `name` 必须是用父级命名做前缀，如新增子权限`post_create`。
+创建子权限时若不写前缀`post_`，Entrust将自动补全。多级子权限亦同。如 `post_create_detail` ...
 
 #### 验证Roles&Permissions
 
