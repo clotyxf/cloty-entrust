@@ -62,6 +62,7 @@ php artisan vendor:publish
 可以通过编辑文件  `config/entrust.php` 变更对应的表名或者模型
 
 ```php
+    'cache_driver' => 'redis', // 建议配置为`redis`，由于使用Tag缓存角色关系,`file`是不支持的
     'cfc' => 1 // 默认值1，中间件验证失败时返回abort(403);
 ```
 
