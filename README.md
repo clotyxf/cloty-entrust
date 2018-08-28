@@ -159,8 +159,6 @@ $admin = Entrust::createRole($admins);
 
 ```php
 
-TODO:支持通过Entrust直接绑定role
-
 $user = User::where('username', 'cloty')->first();
 
 // 方法
@@ -168,6 +166,9 @@ $user->attachRole($admin); // 参数可以是EntrustRole对象、数组或id
 
 // 或者laravel框架原生的关系绑定
 $user->entrustRoles()->attach($admin->id); // 只能是角色ID
+
+//or
+Entrust::attachUserRole($user->id, $admin->id); //uids参数 int|array
 ```
 
 现在我们只需要为这些角色添加权限:
