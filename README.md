@@ -28,7 +28,7 @@ cloty-entrust 是一个基于laravel5的简单验证角色权限的插件
 1) 安装entrust的方式很简单，直接添加到laravel5的composer.json安装即可。或者通过命令 `composer update` 安装:
 
 ```json
-"cloty/cloty-entrust": "~1.5.3"
+"cloty/cloty-entrust": "~1.5.5"
 ```
 
 2) 在 `config/app.php`中的 `providers` 引入服务提供者:
