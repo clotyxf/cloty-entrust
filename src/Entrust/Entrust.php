@@ -5,6 +5,7 @@ namespace Cloty\Entrust;
 use Cloty\Entrust\Contracts\Entrust as EntrustContract;
 use Cloty\Entrust\Contracts\Repositories\PermissionRepository;
 use Cloty\Entrust\Contracts\Repositories\RoleRepository;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\Foundation\Application;
 
 /**
@@ -150,7 +151,7 @@ class Entrust implements EntrustContract
     }
 
     /**
-     * * Find a role by its id.
+     * Find a role by its id.
      *
      * @param int $roleId
      *
@@ -235,5 +236,43 @@ class Entrust implements EntrustContract
     public function permissionTree($roleId = 0)
     {
         return $this->permissionRepository->getPermissionTree($roleId);
+    }
+
+    /**
+     * @param array|int $uids
+     * @param int $roleId
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function attachUserRole($uids, $roleId)
+    {
+        if (!is_array($uids)) {
+            $uids = [$uids];
+        }
+        if (empty($roleId) || empty($uids)) {
+            return false;
+        }
+
+        $uidOfRole = DB::table(config('entrust.role_user_table'))
+            ->where('role_id', $roleId)->get()->toArray();
+
+        $uidOfRole = array_column($uidOfRole, 'user_id');
+
+        $repeatIds = array_intersect($uids, $uidOfRole);
+        if (!empty($repeatIds)) {
+            $uids = array_diff($uids, $repeatIds);
+        }
+
+        $data = [];
+        foreach ($uids as $uid) {
+            $data[] = [
+                'user_id' => $uid,
+                'role_id' => $roleId
+            ];
+        }
+        $result = DB::table(config('entrust.role_user_table'))
+            ->insert($data);
+        
+        return $result;
     }
 }
